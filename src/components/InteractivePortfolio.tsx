@@ -161,10 +161,15 @@ export default function InteractivePortfolio({ setHovering }: InteractivePortfol
             lucas11moraes@hotmail.com
           </Text>
           <Flex gap="8">
-            {['Twitter', 'LinkedIn', 'GitHub'].map((social) => (
+            {[
+              { name: 'LinkedIn', url: 'https://www.linkedin.com/in/lucas-moraes-js/' },
+              { name: 'GitHub', url: 'https://github.com/Momas7' }
+            ].map((social) => (
               <ChakraLink
-                key={social}
-                href="#"
+                key={social.name}
+                href={social.url}
+                target="_blank"
+                rel="noopener noreferrer"
                 fontSize="lg"
                 fontWeight="500"
                 color="blackAlpha.600"
@@ -172,7 +177,7 @@ export default function InteractivePortfolio({ setHovering }: InteractivePortfol
                 onMouseEnter={() => setHovering(true)}
                 onMouseLeave={() => setHovering(false)}
               >
-                {social}
+                {social.name}
               </ChakraLink>
             ))}
           </Flex>
