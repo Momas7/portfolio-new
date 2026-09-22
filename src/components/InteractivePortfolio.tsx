@@ -2,9 +2,11 @@
 
 import { Box, Flex, Text, Heading, Link as ChakraLink } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 import { Project, projects } from '@/data/projects'
 import { useState } from 'react'
 import ProjectModal from './ProjectModal'
+import { ModeToggle } from './mode-toggle'
 
 const MotionBox = motion.create(Box)
 const MotionFlex = motion.create(Flex)
@@ -17,7 +19,19 @@ export default function InteractivePortfolio({ setHovering }: InteractivePortfol
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
 
   return (
-    <Box minH="100vh" bg="#fafafa" position="relative" pt="20" pb="20">
+    <Box
+      minH="100vh"
+      bg="var(--portfolio-bg)"
+      color="var(--portfolio-fg)"
+      position="relative"
+      pt="20"
+      pb="20"
+      transition="background-color 0.25s ease, color 0.25s ease"
+    >
+      {/* Mode toggle — https://ui.shadcn.com/docs/dark-mode/next */}
+      <Box position="fixed" top="6" right="6" zIndex="40">
+        <ModeToggle />
+      </Box>
       <Box maxW="90rem" mx="auto" px={{ base: 6, md: 12 }}>
         {/* Header */}
         <MotionFlex
@@ -31,7 +45,7 @@ export default function InteractivePortfolio({ setHovering }: InteractivePortfol
             fontSize="sm"
             fontWeight="600"
             letterSpacing="0.2em"
-            color="blackAlpha.500"
+            color="var(--portfolio-faint)"
             mb="4"
             textTransform="uppercase"
           >
@@ -43,7 +57,7 @@ export default function InteractivePortfolio({ setHovering }: InteractivePortfol
             fontWeight="900"
             letterSpacing="-0.04em"
             lineHeight="1"
-            color="black"
+            color="var(--portfolio-fg)"
             mb="8"
           >
             Criando
@@ -55,7 +69,7 @@ export default function InteractivePortfolio({ setHovering }: InteractivePortfol
 
           <Text
             fontSize={{ base: 'lg', md: '2xl' }}
-            color="blackAlpha.700"
+            color="var(--portfolio-muted)"
             maxW="2xl"
             lineHeight="1.6"
             fontWeight="400"
@@ -98,16 +112,26 @@ export default function InteractivePortfolio({ setHovering }: InteractivePortfol
                   whileHover={{ scale: 0.98 }}
                   transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <Flex
-                    w="full"
-                    h="full"
-                    alignItems="center"
-                    justifyContent="center"
-                    fontSize={{ base: '6xl', md: '8xl' }}
-                    opacity={0.3}
-                  >
-                    ✦
-                  </Flex>
+                  {project.image ? (
+                    <Image
+                      src={project.image}
+                      alt={`Screenshot do projeto ${project.title}`}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      style={{ objectFit: 'cover', objectPosition: 'top' }}
+                    />
+                  ) : (
+                    <Flex
+                      w="full"
+                      h="full"
+                      alignItems="center"
+                      justifyContent="center"
+                      fontSize={{ base: '6xl', md: '8xl' }}
+                      opacity={0.3}
+                    >
+                      ✦
+                    </Flex>
+                  )}
                 </MotionBox>
 
                 {/* Project Info */}
@@ -115,7 +139,7 @@ export default function InteractivePortfolio({ setHovering }: InteractivePortfol
                   <Text
                     fontSize="xl"
                     fontWeight="500"
-                    color="blackAlpha.500"
+                    color="var(--portfolio-faint)"
                     fontFamily="monospace"
                   >
                     /{project.number}
@@ -125,7 +149,7 @@ export default function InteractivePortfolio({ setHovering }: InteractivePortfol
                     fontSize={{ base: '3xl', md: '5xl' }}
                     fontWeight="700"
                     letterSpacing="-0.02em"
-                    color="black"
+                    color="var(--portfolio-fg)"
                     transition="transform 0.3s ease"
                     _groupHover={{ transform: 'translateX(20px)' }}
                   >
@@ -133,7 +157,7 @@ export default function InteractivePortfolio({ setHovering }: InteractivePortfol
                   </Heading>
                   <Text
                     fontSize="xl"
-                    color="blackAlpha.700"
+                    color="var(--portfolio-muted)"
                     mt="2"
                   >
                     {project.subtitle}
@@ -149,7 +173,7 @@ export default function InteractivePortfolio({ setHovering }: InteractivePortfol
           mt="32"
           pt="16"
           borderTop="1px solid"
-          borderColor="blackAlpha.200"
+          borderColor="var(--portfolio-border)"
           justifyContent="space-between"
           direction={{ base: 'column', md: 'row' }}
           gap="8"
@@ -172,8 +196,8 @@ export default function InteractivePortfolio({ setHovering }: InteractivePortfol
                 rel="noopener noreferrer"
                 fontSize="lg"
                 fontWeight="500"
-                color="blackAlpha.600"
-                _hover={{ color: 'black', textDecoration: 'none' }}
+                color="var(--portfolio-muted)"
+                _hover={{ color: 'var(--portfolio-fg)', textDecoration: 'none' }}
                 onMouseEnter={() => setHovering(true)}
                 onMouseLeave={() => setHovering(false)}
               >

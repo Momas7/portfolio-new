@@ -1,3 +1,29 @@
+:root {
+  color-scheme: light;
+  --portfolio-bg: #fafafa;
+  --portfolio-fg: #0a0a0a;
+  --portfolio-muted: rgba(0, 0, 0, 0.62);
+  --portfolio-faint: rgba(0, 0, 0, 0.45);
+  --portfolio-border: rgba(0, 0, 0, 0.12);
+  --toggle-bg: #ffffff;
+  --toggle-fg: #0a0a0a;
+  --toggle-border: rgba(0, 0, 0, 0.12);
+  --toggle-active-bg: rgba(0, 0, 0, 0.06);
+}
+
+.dark {
+  color-scheme: dark;
+  --portfolio-bg: #0a0a0a;
+  --portfolio-fg: #fafafa;
+  --portfolio-muted: rgba(255, 255, 255, 0.65);
+  --portfolio-faint: rgba(255, 255, 255, 0.45);
+  --portfolio-border: rgba(255, 255, 255, 0.14);
+  --toggle-bg: #171717;
+  --toggle-fg: #fafafa;
+  --toggle-border: rgba(255, 255, 255, 0.14);
+  --toggle-active-bg: rgba(255, 255, 255, 0.08);
+}
+
 *,
 *::before,
 *::after {
@@ -12,7 +38,9 @@ html {
 
 body {
   overflow-x: hidden;
-  background: #fafafa;
+  background: var(--portfolio-bg);
+  color: var(--portfolio-fg);
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 /* Hide default cursor on desktop when custom cursor is active */
@@ -36,10 +64,10 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.15);
+  background: var(--portfolio-faint);
   border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.25);
+  background: var(--portfolio-muted);
 }

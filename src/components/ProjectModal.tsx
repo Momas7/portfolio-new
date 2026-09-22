@@ -2,6 +2,7 @@
 
 import { Box, Flex, Text, Heading, HStack, Link as ChakraLink, IconButton } from '@chakra-ui/react'
 import { motion, AnimatePresence } from 'framer-motion'
+import Image from 'next/image'
 import { Project } from '@/data/projects'
 import { useEffect } from 'react'
 
@@ -179,7 +180,7 @@ export default function ProjectModal({ project, isOpen, onClose, setHovering }: 
                 </HStack>
               </Flex>
 
-              {/* Right Side: Image Placeholder */}
+              {/* Right Side: Image / Preview */}
               <Box
                 flex="1"
                 bg="blackAlpha.50"
@@ -189,10 +190,22 @@ export default function ProjectModal({ project, isOpen, onClose, setHovering }: 
                 justifyContent="center"
                 borderLeft="1px solid"
                 borderColor="blackAlpha.100"
+                overflow="hidden"
+                minH="400px"
               >
-                <Text fontSize="6xl" opacity={0.2}>
-                  🖥️
-                </Text>
+                {project.image ? (
+                  <Image
+                    src={project.image}
+                    alt={`Screenshot do projeto ${project.title}`}
+                    fill
+                    sizes="50vw"
+                    style={{ objectFit: 'cover', objectPosition: 'top' }}
+                  />
+                ) : (
+                  <Text fontSize="6xl" opacity={0.2}>
+                    🖥️
+                  </Text>
+                )}
               </Box>
             </Flex>
           </MotionFlex>

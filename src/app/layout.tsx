@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Provider } from "@/components/ui/provider";
+import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -32,7 +33,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           fontFamily: "var(--font-geist-sans), sans-serif",
         }}
       >
-        <Provider>{children}</Provider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Provider>{children}</Provider>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -6,6 +6,7 @@ export interface Project {
   description: string
   tags: string[]
   color: string
+  image?: string
   github?: string
   live?: string
   year: string
@@ -13,8 +14,21 @@ export interface Project {
 
 export const projects: Project[] = [
   {
-    id: 'ecommerce',
+    id: 'alert-engine',
     number: '01',
+    title: 'Alert Engine',
+    subtitle: 'Mini-Zapier interno de alertas',
+    description:
+      'Motor genérico de regras em Node + TypeScript: gerentes cadastram uma regra uma vez (evento → condição → ação) e o motor avalia cada evento e dispara sozinho — sem checar dashboard. Strategy, Factory, Observer, Chain of Responsibility, Composite e Repository aplicados de propósito, com API Express + Prisma e dashboard em Next.js + Chakra UI.',
+    tags: ['TypeScript', 'Node.js', 'Express', 'Prisma'],
+    color: '#FFF7ED',
+    image: '/alert-engine-dashboard.png',
+    github: 'https://github.com/Momas7/zapier',
+    year: '2026',
+  },
+  {
+    id: 'ecommerce',
+    number: '02',
     title: 'E-Commerce Platform',
     subtitle: 'Plataforma de vendas online',
     description:
@@ -27,7 +41,7 @@ export const projects: Project[] = [
   },
   {
     id: 'taskmanager',
-    number: '02',
+    number: '03',
     title: 'Task Manager',
     subtitle: 'Gestão de tarefas em tempo real',
     description:
@@ -40,7 +54,7 @@ export const projects: Project[] = [
   },
   {
     id: 'dashboard',
-    number: '03',
+    number: '04',
     title: 'Analytics Dashboard',
     subtitle: 'Visualização de dados interativa',
     description:
@@ -52,7 +66,7 @@ export const projects: Project[] = [
   },
   {
     id: 'blogcms',
-    number: '04',
+    number: '05',
     title: 'Blog CMS',
     subtitle: 'Sistema de conteúdo headless',
     description:
@@ -65,7 +79,7 @@ export const projects: Project[] = [
   },
   {
     id: 'chatapp',
-    number: '05',
+    number: '06',
     title: 'Chat Application',
     subtitle: 'Mensageria em tempo real',
     description:
@@ -77,7 +91,7 @@ export const projects: Project[] = [
   },
   {
     id: 'portfolio',
-    number: '06',
+    number: '07',
     title: 'Creative Portfolio',
     subtitle: 'Este portfólio',
     description:
