@@ -7,6 +7,7 @@ import { Project, projects } from '@/data/projects'
 import { useState } from 'react'
 import ProjectModal from './ProjectModal'
 import { ModeToggle } from './mode-toggle'
+import About from './About'
 
 const MotionBox = motion.create(Box)
 const MotionFlex = motion.create(Flex)
@@ -36,7 +37,7 @@ export default function InteractivePortfolio({ setHovering }: InteractivePortfol
         {/* Header */}
         <MotionFlex
           direction="column"
-          mb={{ base: 16, md: 32 }}
+          mb={{ base: 16, md: 24 }}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
@@ -80,6 +81,9 @@ export default function InteractivePortfolio({ setHovering }: InteractivePortfol
           </Text>
         </MotionFlex>
 
+        {/* Sobre mim */}
+        <About />
+
         {/* Project Grid */}
         <Flex direction="column" gap={{ base: 12, md: 24 }}>
           {projects.map((project, i) => (
@@ -104,7 +108,8 @@ export default function InteractivePortfolio({ setHovering }: InteractivePortfol
                 <MotionBox
                   flex="1"
                   w="full"
-                  h={{ base: '300px', md: '500px' }}
+                  minW="0"
+                  aspectRatio={{ base: '4 / 3', md: '16 / 10' }}
                   bg={project.color}
                   borderRadius="3xl"
                   position="relative"
@@ -181,9 +186,34 @@ export default function InteractivePortfolio({ setHovering }: InteractivePortfol
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
-          <Text fontSize="lg" fontWeight="600">
-            lucas11moraes@hotmail.com
-          </Text>
+          <Flex
+            direction={{ base: 'column', md: 'row' }}
+            gap={{ base: 3, md: 6 }}
+            alignItems={{ base: 'flex-start', md: 'center' }}
+          >
+            <ChakraLink
+              href="mailto:lucas11moraes@hotmail.com"
+              fontSize="lg"
+              fontWeight="600"
+              color="var(--portfolio-fg)"
+              _hover={{ textDecoration: 'none', opacity: 0.7 }}
+              onMouseEnter={() => setHovering(true)}
+              onMouseLeave={() => setHovering(false)}
+            >
+              lucas11moraes@hotmail.com
+            </ChakraLink>
+            <ChakraLink
+              href="tel:+5571991676668"
+              fontSize="lg"
+              fontWeight="600"
+              color="var(--portfolio-fg)"
+              _hover={{ textDecoration: 'none', opacity: 0.7 }}
+              onMouseEnter={() => setHovering(true)}
+              onMouseLeave={() => setHovering(false)}
+            >
+              (71) 99167-6668
+            </ChakraLink>
+          </Flex>
           <Flex gap="8">
             {[
               { name: 'LinkedIn', url: 'https://www.linkedin.com/in/lucas-moraes-js/' },
