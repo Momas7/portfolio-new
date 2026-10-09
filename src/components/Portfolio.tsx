@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { Project, projects } from '@/data/projects'
-import Galaxy from './Galaxy'
+import GravityWell from './GravityWell'
 import TypedName from './TypedName'
 import About from './About'
 import ProjectModal from './ProjectModal'
@@ -64,7 +64,7 @@ export default function Portfolio() {
       </div>
 
       <section className="hero" id="inicio">
-        <Galaxy targetId="sobre" label={t('hole')} />
+        <GravityWell targetId="sobre" label={t('hole')} hint={t('holeHint')} />
         <div className="hero-veil" aria-hidden="true" />
         <div className="shell hero-content">
           <TypedName text="Lucas Moraes Matos" />

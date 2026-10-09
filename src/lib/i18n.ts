@@ -47,6 +47,7 @@ const dict = {
   about: { pt: 'Sobre', en: 'About' },
   projects: { pt: 'Projetos', en: 'Projects' },
   contact: { pt: 'Contato', en: 'Contact' },
+  holeHint: { pt: 'clique para entrar', en: 'click to enter' },
   hole: { pt: 'Entrar no buraco negro e ir para Sobre', en: 'Enter the black hole and go to About' },
 
   aboutLead: {
