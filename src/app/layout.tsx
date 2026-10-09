@@ -1,21 +1,20 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { Provider } from "@/components/ui/provider";
-import { ThemeProvider } from "@/components/theme-provider";
+import Script from "next/script";
+import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import { themeInitScript } from "@/lib/theme";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const display = Space_Grotesk({
+  variable: "--font-display",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const mono = JetBrains_Mono({
+  variable: "--font-mono",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "Lucas | Desenvolvedor Full Stack",
   description:
     "Portfólio de Lucas — Desenvolvedor Full Stack apaixonado por criar experiências digitais elegantes, funcionais e automatizar processos.",
   keywords: ["desenvolvedor", "full stack", "react", "next.js", "portfolio"],
@@ -26,21 +25,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="pt-BR"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable}`}
+      className={`${display.variable} ${mono.variable}`}
     >
-      <body
-        style={{
-          fontFamily: "var(--font-geist-sans), sans-serif",
-        }}
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <Provider>{children}</Provider>
-        </ThemeProvider>
+      <body>
+        <Script id="theme-init" strategy="beforeInteractive">
+          {`${themeInitScript};try{if(localStorage.getItem('lang')==='en')document.documentElement.lang='en'}catch(e){}`}
+        </Script>
+        {children}
       </body>
     </html>
   );

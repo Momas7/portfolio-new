@@ -1,208 +1,96 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { useTheme } from "next-themes"
-import { Box, Flex, Text } from "@chakra-ui/react"
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
+import { useLang } from '@/lib/i18n'
+import { getThemePref, isDarkResolved, setThemePref, subscribeTheme, ThemePref } from '@/lib/theme'
 
-// Adaptado de https://ui.shadcn.com/docs/dark-mode/next
-// O projeto usa Chakra UI (sem button/dropdown-menu do shadcn),
-// então o toggle replica a mesma API Light / Dark / System
-// usando apenas next-themes + Chakra + SVG inline (estilo lucide).
+// Mesma API do toggle do shadcn (Claro / Escuro / Sistema), sem next-themes.
 
-function SunIcon({ size = 19 }: { size?: number }) {
+function SunIcon() {
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <circle cx="12" cy="12" r="4" />
-      <path d="M12 2v2" />
-      <path d="M12 20v2" />
-      <path d="m4.93 4.93 1.41 1.41" />
-      <path d="m17.66 17.66 1.41 1.41" />
-      <path d="M2 12h2" />
-      <path d="M20 12h2" />
-      <path d="m6.34 17.66-1.41 1.41" />
-      <path d="m19.07 4.93-1.41 1.41" />
+      <path d="M12 2v2M12 20v2m-7.07-17.07 1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
     </svg>
   )
 }
 
-function MoonIcon({ size = 19 }: { size?: number }) {
+function MoonIcon() {
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
     </svg>
   )
 }
 
+const options = [
+  { value: 'light', label: 'light' },
+  { value: 'dark', label: 'dark' },
+  { value: 'system', label: 'system' },
+] as const satisfies readonly { value: ThemePref; label: string }[]
+
 export function ModeToggle() {
-  const { theme, setTheme, resolvedTheme } = useTheme()
-  const [mounted, setMounted] = React.useState(false)
-  const [open, setOpen] = React.useState(false)
-  const rootRef = React.useRef<HTMLDivElement>(null)
+  const theme = useSyncExternalStore(subscribeTheme, getThemePref, () => null)
+  const [open, setOpen] = useState(false)
+  const { t } = useLang()
+  const rootRef = useRef<HTMLDivElement>(null)
 
-  React.useEffect(() => setMounted(true), [])
-
-  React.useEffect(() => {
+  useEffect(() => {
     if (!open) return
     const onClick = (e: MouseEvent) => {
-      if (rootRef.current && !rootRef.current.contains(e.target as Node)) {
-        setOpen(false)
-      }
+      if (rootRef.current && !rootRef.current.contains(e.target as Node)) setOpen(false)
     }
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false)
+      if (e.key === 'Escape') setOpen(false)
     }
-    document.addEventListener("mousedown", onClick)
-    document.addEventListener("keydown", onKey)
+    document.addEventListener('mousedown', onClick)
+    document.addEventListener('keydown', onKey)
     return () => {
-      document.removeEventListener("mousedown", onClick)
-      document.removeEventListener("keydown", onKey)
+      document.removeEventListener('mousedown', onClick)
+      document.removeEventListener('keydown', onKey)
     }
-  }, [open ])
+  }, [open])
 
-  if (!mounted) {
-    return (
-      <Box
-        w="40px"
-        h="40px"
-        borderRadius="full"
-        border="1px solid var(--toggle-border)"
-        bg="var(--toggle-bg)"
-        aria-hidden="true"
-      />
-    )
-  }
+  if (!theme) return <span className="toggle" aria-hidden="true" />
 
-  const isDark = resolvedTheme === "dark"
-  const options = [
-    { value: "light", label: "Light" },
-    { value: "dark", label: "Dark" },
-    { value: "system", label: "System" },
-  ] as const
+  const dark = isDarkResolved(theme)
 
   return (
-    <Box ref={rootRef} position="relative">
+    <div ref={rootRef} className="toggle-root">
       <button
         type="button"
-        aria-label={`Trocar tema. Atual: ${theme}`}
+        className="toggle"
+        aria-label={`${t('theme')} ${t(theme)}`}
+        aria-expanded={open}
+        aria-haspopup="menu"
         onClick={() => setOpen((v) => !v)}
-        style={{
-          width: 40,
-          height: 40,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          borderRadius: "9999px",
-          border: "1px solid var(--toggle-border)",
-          background: "var(--toggle-bg)",
-          color: "var(--toggle-fg)",
-          cursor: "pointer",
-          transition: "background 0.2s ease, transform 0.2s ease",
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = "scale(1.05)"
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = "scale(1)"
-        }}
       >
-        <Box position="relative" w="19px" h="19px">
-          {/* Sol visível no light, lua no dark — mesma animação do exemplo shadcn */}
-          <Box
-            position="absolute"
-            inset="0"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            transition="all 0.3s ease"
-            transform={isDark ? "rotate(-90deg) scale(0)" : "rotate(0deg) scale(1)"}
-            opacity={isDark ? 0 : 1}
-          >
-            <SunIcon />
-          </Box>
-          <Box
-            position="absolute"
-            inset="0"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            transition="all 0.3s ease"
-            transform={isDark ? "rotate(0deg) scale(1)" : "rotate(90deg) scale(0)"}
-            opacity={isDark ? 1 : 0}
-          >
-            <MoonIcon />
-          </Box>
-        </Box>
-        <Text as="span" srOnly>
-          Toggle theme
-        </Text>
+        <span className="toggle-icon" data-on={!dark}>
+          <SunIcon />
+        </span>
+        <span className="toggle-icon" data-on={dark}>
+          <MoonIcon />
+        </span>
       </button>
 
       {open && (
-        <Box
-          position="absolute"
-          top="48px"
-          right="0"
-          minW="140px"
-          borderRadius="xl"
-          border="1px solid var(--toggle-border)"
-          bg="var(--toggle-bg)"
-          color="var(--toggle-fg)"
-          boxShadow="0 12px 32px rgba(0,0,0,0.12)"
-          overflow="hidden"
-          zIndex="60"
-        >
-          <Flex direction="column" p="1">
-            {options.map((opt) => {
-              const active = theme === opt.value
-              return (
-                <button
-                  key={opt.value}
-                  type="button"
-                  onClick={() => {
-                    setTheme(opt.value)
-                    setOpen(false)
-                  }}
-                  style={{
-                    textAlign: "left",
-                    padding: "8px 12px",
-                    fontSize: "14px",
-                    fontWeight: active ? 600 : 400,
-                    borderRadius: "8px",
-                    border: "none",
-                    cursor: "pointer",
-                    background: active
-                      ? "var(--toggle-active-bg)"
-                      : "transparent",
-                    color: "var(--toggle-fg)",
-                  }}
-                >
-                  {opt.label}
-                </button>
-              )
-            })}
-          </Flex>
-        </Box>
+        <div className="toggle-menu" role="menu">
+          {options.map((opt) => (
+            <button
+              key={opt.value}
+              type="button"
+              role="menuitemradio"
+              aria-checked={theme === opt.value}
+              onClick={() => {
+                setThemePref(opt.value)
+                setOpen(false)
+              }}
+            >
+              {t(opt.label)}
+            </button>
+          ))}
+        </div>
       )}
-    </Box>
+    </div>
   )
 }
